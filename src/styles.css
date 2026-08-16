@@ -195,3 +195,6 @@
   --font-sans: "Comic Sans MS", "Lexend", "OpenDyslexic", system-ui, sans-serif !important;
   --font-display: "Comic Sans MS", "Lexend", "OpenDyslexic", system-ui, sans-serif !important;
 }
+
+/* Hide Lovable Badge */
+[id^="lovable-badge"], .lovable-badge-container, #lovable-badge, div[id*="lovable"] { display: none !important; }
