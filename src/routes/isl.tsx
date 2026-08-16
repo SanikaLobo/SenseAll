@@ -138,6 +138,60 @@ function ISLPage() {
         description="Text to sign uses a curated ISL library. Sign to text provides the camera interface and architecture for a recognition model — it is not pretending to be one."
       />
 
+      {/* ── ISL Demo Flow (from Ishaara) ──────────────────────────────────── */}
+      <section className="surface-panel p-6" aria-labelledby="demo-heading">
+        <h2 id="demo-heading" className="text-2xl font-semibold">How ISL translation works</h2>
+        <p className="mt-2 text-base text-muted-foreground">
+          No worries — Ishaara AI bridges the gap for you.
+        </p>
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3 items-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="overflow-hidden rounded-2xl border border-border bg-muted">
+              <img src="/ishaara-assets/example0.gif" alt="ISL gesture being performed" className="w-full" />
+            </div>
+            <p className="text-base font-semibold text-primary">Your Sign</p>
+          </div>
+          <div className="hidden sm:flex flex-col items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+              <span className="text-xl">→</span>
+            </div>
+            <div className="overflow-hidden rounded-2xl border border-border bg-muted">
+              <img src="/ishaara-assets/example1.gif" alt="ISL detection overlay" className="w-full" />
+            </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20">
+              <span className="text-xl">→</span>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <div className="overflow-hidden rounded-2xl border border-border bg-muted">
+              <img src="/ishaara-assets/example2.gif" alt="ISL translated to text" className="w-full" />
+            </div>
+            <p className="text-base font-semibold text-primary">We Translate!</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Key Features (from Ishaara) ───────────────────────────────────── */}
+      <section className="surface-panel p-6" aria-labelledby="features-heading">
+        <h2 id="features-heading" className="text-2xl font-semibold">Key Features</h2>
+        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { img: "/ishaara-assets/f1.png", title: "Sign to Text", desc: "Automatically translates sign language gestures into written text." },
+            { img: "/ishaara-assets/f2.png", title: "Depth Detection", desc: "Utilizes advanced technology to accurately detect the depth and position of sign language movements." },
+            { img: "/ishaara-assets/f3.png", title: "Grammatically Correct", desc: "Ensures that the translated text maintains proper grammar and syntax." },
+            { img: "/ishaara-assets/f4.png", title: "High Accuracy", desc: "Provides precise and reliable translations with minimal errors." },
+            { img: "/ishaara-assets/f5.png", title: "LLM Powered", desc: "Employs a Language Model with high proficiency and understanding, enhancing translation accuracy." },
+            { img: "/ishaara-assets/f6.png", title: "Unique Model", desc: "Utilizes a proprietary model specifically tailored for sign language translation." },
+          ].map(({ img, title, desc }) => (
+            <div key={title} className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-muted/40 p-5 text-center hover:border-primary/60 transition-colors">
+              <img src={img} alt={title} className="size-16 object-contain" />
+              <h3 className="text-lg font-semibold">{title}</h3>
+              <p className="text-base text-muted-foreground">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <Tabs defaultValue="text-to-sign">
         <TabsList className="h-auto flex-wrap gap-2 p-2">
           <TabsTrigger value="text-to-sign" className="min-h-14 px-6 text-lg">

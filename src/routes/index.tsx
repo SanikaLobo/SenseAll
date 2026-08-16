@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Mic, Hand, Grid2x2, Vibrate, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Mic, Hand, Grid2x2, Vibrate, ArrowRight, Users, HandMetal, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePrefs } from "@/lib/prefs";
 
@@ -31,6 +31,102 @@ const PILLARS = [
   { icon: Vibrate, title: "Haptics", copy: "Feedback you can feel, not just see." },
 ];
 
+const STATS = [
+  { icon: Users, value: 63000000, label: "People in India with hearing disability", color: "text-primary" },
+  { icon: HandMetal, value: 84350000, label: "Indian Sign Language users", color: "text-primary" },
+  { icon: BookOpen, value: 250, label: "Certified ISL translators in India", color: "text-primary" },
+];
+
+const USE_CASES = [
+  { front: "Education", back: ["Schools for the Deaf", "Inclusive Education"] },
+  { front: "Digital Communication", back: ["Conversations", "Social Gatherings"] },
+  { front: "Quick Communication", back: ["Quickly Communicate without Latency"] },
+  { front: "Healthcare", back: ["Medical Consultations", "Health Education"] },
+];
+
+function useCountUp(target: number, duration = 2000, start = false) {
+  const [count, setCount] = useState(0);
+  const raf = useRef<number | null>(null);
+  useEffect(() => {
+    if (!start) return;
+    const startTime = performance.now();
+    const tick = (now: number) => {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * target));
+      if (progress < 1) raf.current = requestAnimationFrame(tick);
+    };
+    raf.current = requestAnimationFrame(tick);
+    return () => { if (raf.current) cancelAnimationFrame(raf.current); };
+  }, [target, duration, start]);
+  return count;
+}
+
+function formatCount(n: number) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(0)}M+`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K+`;
+  return `${n}`;
+}
+
+function StatCard({ icon: Icon, value, label, color }: { icon: typeof Users; value: number; label: string; color: string }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+  const count = useCountUp(value, 2200, visible);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setVisible(true); }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className="surface-panel flex flex-col items-center gap-3 p-8 text-center">
+      <span aria-hidden="true" className={`grid size-16 place-items-center rounded-2xl bg-primary/10 ${color}`}>
+        <Icon className="size-8" />
+      </span>
+      <p className={`font-display text-5xl font-semibold tabular-nums ${color}`}>{formatCount(count)}</p>
+      <p className="text-lg text-muted-foreground">{label}</p>
+    </div>
+  );
+}
+
+function UseCaseCard({ front, back }: { front: string; back: string[] }) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div
+      className="relative h-40 cursor-pointer"
+      style={{ perspective: "800px" }}
+      onClick={() => setFlipped((f) => !f)}
+      onKeyDown={(e) => e.key === "Enter" && setFlipped((f) => !f)}
+      tabIndex={0}
+      role="button"
+      aria-label={`${front} — click to reveal`}
+    >
+      <div
+        className="absolute inset-0 transition-transform duration-500"
+        style={{ transformStyle: "preserve-3d", transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
+      >
+        {/* Front */}
+        <div
+          className="absolute inset-0 flex items-center justify-center rounded-2xl border border-border bg-primary text-primary-foreground"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <p className="text-2xl font-semibold px-4 text-center">{front}</p>
+        </div>
+        {/* Back */}
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-2xl border border-primary bg-accent px-4"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          {back.map((item) => (
+            <p key={item} className="text-lg font-medium text-accent-foreground text-center">{item}</p>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Landing() {
   const { prefs, hydrated } = usePrefs();
   const [ready, setReady] = useState(false);
@@ -43,7 +139,7 @@ function Landing() {
   const destination = hydrated && prefs.onboarded ? "/home" : "/onboarding";
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-20">
       <section className="pt-4">
         <p className="text-base font-semibold uppercase tracking-[0.18em] text-primary">
           Inclusive communication platform
@@ -88,6 +184,38 @@ function Landing() {
               </span>
               <h3 className="mt-4 text-2xl font-semibold">{title}</h3>
               <p className="mt-2 text-lg text-muted-foreground">{copy}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ── ISL Impact Stats (from Ishaara) ─────────────────────────────── */}
+      <section aria-labelledby="stats-heading">
+        <h2 id="stats-heading" className="text-3xl font-semibold">
+          The scale of the problem
+        </h2>
+        <p className="mt-3 text-lg text-muted-foreground max-w-2xl">
+          India's deaf and hard-of-hearing community is one of the largest in the world — yet vastly underserved.
+        </p>
+        <ul className="mt-8 grid gap-5 sm:grid-cols-3">
+          {STATS.map((stat) => (
+            <li key={stat.label}>
+              <StatCard {...stat} />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ── Use Cases (from Ishaara) ─────────────────────────────────────── */}
+      <section aria-labelledby="usecases-heading">
+        <h2 id="usecases-heading" className="text-3xl font-semibold">
+          Who benefits from SenseAll?
+        </h2>
+        <p className="mt-3 text-lg text-muted-foreground">Click a card to see where we make a difference.</p>
+        <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {USE_CASES.map((uc) => (
+            <li key={uc.front}>
+              <UseCaseCard {...uc} />
             </li>
           ))}
         </ul>
