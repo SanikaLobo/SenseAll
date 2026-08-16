@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Play, Pause, RotateCcw, Camera, CameraOff, Grid2x2, Volume2, Copy } from "lucide-react";
+import { Play, Pause, RotateCcw, Camera, CameraOff, Grid2x2, Volume2, Copy, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { PageHeader } from "@/components/AppShell";
@@ -217,23 +217,44 @@ function ISLPage() {
             <h2 id="library-heading" className="text-2xl font-semibold">
               Sign library
             </h2>
-            <ul className="mt-4 flex flex-wrap gap-3">
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {SIGN_LIBRARY.map((sign) => (
-                <li key={sign.id}>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="min-h-14 text-lg"
-                    onClick={() => {
-                      setInput(sign.gloss.toLowerCase());
-                      translate(sign.gloss.toLowerCase());
-                    }}
-                  >
-                    {sign.gloss}
-                  </Button>
-                </li>
+                <div
+                  key={sign.id}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/60 hover:shadow-md"
+                >
+                  <div className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-3">
+                    <h3 className="font-display text-base font-semibold tracking-wide text-foreground">
+                      {sign.gloss}
+                    </h3>
+                    <span className="rounded-full bg-accent/60 px-2.5 py-0.5 text-xs font-medium text-accent-foreground">
+                      {sign.category}
+                    </span>
+                  </div>
+                  <div className="relative flex aspect-video w-full items-center justify-center bg-muted/60 p-4 transition-colors group-hover:bg-muted/90">
+                    <span className="text-6xl transition-transform duration-300 group-hover:scale-110">
+                      {sign.keyframes[0]?.glyph}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col justify-between gap-3 p-4 pt-3">
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {sign.description}
+                    </p>
+                    <button
+                      onClick={() => {
+                        setInput(sign.gloss.toLowerCase());
+                        translate(sign.gloss.toLowerCase());
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary transition-all duration-200 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <BookOpen className="size-4" aria-hidden="true" />
+                      CLICK TO LEARN
+                    </button>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         </TabsContent>
 
@@ -258,7 +279,7 @@ const CONFIDENCE_THRESHOLD = 0.5; // Ignore detections below 50% confidence
 const HOLD_REQUIRED = 5;          // Sign must appear in N consecutive frames to count
 const BUFFER_TARGET = 4;          // Collect N confirmed signs before calling Gemini
 const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
 
 // Minimal type shim for the globally injected Roboflow SDK
 declare global {
