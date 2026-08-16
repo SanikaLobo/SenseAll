@@ -1,0 +1,91 @@
+.jumbotron{
+  display: flex;
+  justify-content: center;
+  padding:10px;
+}
+
+.inside{
+  position:absolute;
+  z-index: 9;
+  width:full;
+  max-width: 800px;
+  height:600px;
+  left: 35%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+}
+.detect{
+  position:absolute;
+  width: 600px;
+  border:solid 1px;
+  left: 70%;
+  transform: translateX(-50%);
+  height:595px;
+  border-radius: 10px;
+}
+.btn {
+  position: absolute;
+  left: 55%;
+  transform: translateX(-50%);
+  top:780px;  
+}
+.btn button{
+  width:500px;
+  padding:10px;
+  padding-inline:50px;
+  border-radius: 5px;
+  font: bold;
+  background: linear-gradient(to left, transparent 50%, rgb(123, 0, 0) 50%);
+  background-size: 200% 100%; 
+  background-position: right bottom; 
+  transition: background-position 0.5s; 
+  border:solid 1px;
+}
+
+.btn button:hover {
+  background-position: left bottom; 
+  color:white;
+}
+@media (max-width:2000px){
+  .detect{
+    width:400px;
+  }
+}
+@media (max-width:2000px){
+  .detect{
+    width:400px;
+    left:75%;
+  }
+}
+@media (max-width:2000px){
+  .detect{
+    width:400px;
+    left:80%;
+  }
+}
+
+@media (max-width:1400px){
+  .detect{
+    width:800px;
+    left: 50%;
+    transform: translateX(-50%);
+    top:810px;
+   
+  }
+  .inside{
+  left: 50%;
+  transform: translateX(-50%);
+  }
+  .btn {
+    left: 50%;
+    transform: translateX(-50%);
+    top:740px;
+  }
+}
+.textareab{
+  width:100%;
+  height:100%;
+  padding:1rem;
+  font-size:xx-large;
+  overflow: auto;
+}

@@ -1,0 +1,141 @@
+.use_heading{
+  font-size: 3em;
+  /* text-align: center; */
+  margin: 4%;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+.obj_heading{
+  font-size: 3em;
+  /* text-align: center; */
+  margin: 4%;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+.p {
+  margin-block-start: var(--metric-box-spacing);
+}
+.obj-container {
+  display: flex;
+  flex-direction: column;
+}
+.obj-media {
+  margin: var(--metric-box-spacing);
+  padding: var(--metric-box-spacing);
+  display: flex;
+  align-items: center;
+  gap: var(--metric-box-spacing);
+  margin:0% 2% 2% 2%;
+  padding: 2%;
+}
+
+.obj-media-image-1 img, .obj-media-image-2 img{
+  width: 200%;
+  height: 100%;
+}
+
+.obj-media-image-1 {
+  flex: 1;
+  margin-right: 20%;
+
+}
+.obj-media-content-1 {
+  flex: 3;
+}
+.obj-media-image-2 {
+  flex: 1;
+}
+.obj-media-content-2 {
+  flex: 3;
+  margin-left: 22%;
+}
+
+@media (max-width: 600px) {
+  .obj-media {
+    flex-direction: column;
+    background-color: whitesmoke;
+    margin-top: 10%;
+  }
+  
+  .obj-media-image-1 img, .obj-media-image-2 img{
+    width: 100%;
+    height: auto;
+  }
+  .obj-media-image-1 {
+    margin-right: 0;
+  }
+  .obj-media-content-2 {
+    margin-left: 0;  
+  }
+  .use-container {
+    flex-direction: column;
+    column-gap: 5%;
+  }
+  .use-card{
+    margin-bottom: 5%;
+  }
+}
+
+.use-card {
+  width: 300px;
+  height: 200px;
+  perspective: 1000px;
+}
+
+.use-card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.999s;
+  text-align: center;
+}
+
+.use-card:hover .use-card-inner {
+  transform: rotateY(180deg);
+}
+
+.use-card-front,
+.use-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.use-card-front {
+  background-color: white;
+  color: #000;
+  display: flex;
+  align-items: center;
+  /* border: 1px solid black; */
+  border-radius: 10px;
+  justify-content: center;
+  font-size: 24px;
+  transform: rotateY(0deg);
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+  transition: box-shadow 0.3s ease;
+}
+
+.use-card-back {
+  background-color: black;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 10px solid #F08A5D; */
+  border-radius: 10px;
+  justify-content: center;
+  font-size: 24px;
+  transform: rotateY(180deg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow */
+  transition: box-shadow 0.3s ease;
+}
+
+.use-container {
+  display: flex;
+  margin: 4%;
+  gap: 5%;
+}
