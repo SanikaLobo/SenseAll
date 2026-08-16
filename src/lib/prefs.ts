@@ -14,6 +14,8 @@ export type Prefs = {
   haptics: boolean;
   hapticIntensity: number; // 1-3
   geminiApiKey: string; // Gemini API key for ISL sign-to-text
+  colorBlind: boolean;
+  dyslexiaFont: boolean;
 };
 
 export const DEFAULT_PREFS: Prefs = {
@@ -28,6 +30,8 @@ export const DEFAULT_PREFS: Prefs = {
   haptics: true,
   hapticIntensity: 2,
   geminiApiKey: "AIzaSyB7bE4Ia9ZWk6D1VbGt2ZPVLDbfYhWvkNI",
+  colorBlind: false,
+  dyslexiaFont: false,
 };
 
 const PREFS_KEY = "senseall.prefs.v1";
@@ -124,6 +128,8 @@ export function useApplyPrefs(prefs: Prefs, hydrated: boolean) {
     root.classList.toggle("dark", prefs.theme === "dark");
     root.classList.toggle("contrast-high", prefs.highContrast);
     root.classList.toggle("reduce-motion", prefs.reduceMotion);
+    root.classList.toggle("color-blind", prefs.colorBlind);
+    root.classList.toggle("dyslexia-font", prefs.dyslexiaFont);
     root.style.setProperty("--app-font-scale", `${prefs.textScale}%`);
-  }, [prefs.theme, prefs.highContrast, prefs.reduceMotion, prefs.textScale, hydrated]);
+  }, [prefs.theme, prefs.highContrast, prefs.reduceMotion, prefs.colorBlind, prefs.dyslexiaFont, prefs.textScale, hydrated]);
 }

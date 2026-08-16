@@ -181,3 +181,17 @@
   animation-duration: 0.001ms !important;
   transition-duration: 0.001ms !important;
 }
+
+/* Color blind support (swaps red/green for blue/orange accessible equivalents) */
+.color-blind {
+  --success: oklch(0.6 0.15 250); /* Accessible Blue */
+  --destructive: oklch(0.65 0.18 45); /* Accessible Orange */
+  --warning: oklch(0.75 0.18 80); /* Yellow-orange */
+  --info: oklch(0.6 0.15 250); /* Blue */
+}
+
+/* Dyslexia friendly font */
+.dyslexia-font {
+  --font-sans: "Comic Sans MS", "Lexend", "OpenDyslexic", system-ui, sans-serif !important;
+  --font-display: "Comic Sans MS", "Lexend", "OpenDyslexic", system-ui, sans-serif !important;
+}

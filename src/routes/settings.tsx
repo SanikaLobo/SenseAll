@@ -139,6 +139,20 @@ function SettingsPage() {
             checked={prefs.reduceMotion}
             onChange={(checked) => update({ reduceMotion: checked })}
           />
+          <ToggleRow
+            id="color-blind"
+            label="Color blind support"
+            detail="Adjusts status colors (red/green) to be more distinguishable."
+            checked={prefs.colorBlind}
+            onChange={(checked) => update({ colorBlind: checked })}
+          />
+          <ToggleRow
+            id="dyslexia-font"
+            label="Dyslexia friendly font"
+            detail="Uses fonts that are easier to read for people with dyslexia."
+            checked={prefs.dyslexiaFont}
+            onChange={(checked) => update({ dyslexiaFont: checked })}
+          />
         </div>
       </section>
 

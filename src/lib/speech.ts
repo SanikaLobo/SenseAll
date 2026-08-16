@@ -2,12 +2,88 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 /* ---------------- Text to speech ---------------- */
 
+// Keep a global reference to prevent the utterance from being garbage collected mid-speech,
+// which is a known bug in Safari and Chrome.
+let activeUtterance: SpeechSynthesisUtterance | null = null;
+
+// Cloud TTS fallback for browsers where native SpeechSynthesis is completely broken
+function playCloudFallback(text: string) {
+  try {
+    console.log("[TTS] Attempting cloud TTS fallback...");
+    // Public TTS endpoint (often used for simple translation audio, limited to ~200 chars)
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(text.slice(0, 200))}`;
+    const audio = new Audio(url);
+    audio.play().catch((e) => console.error("[TTS] Cloud fallback failed:", e));
+  } catch (e) {
+    console.error("[TTS] Fallback error:", e);
+  }
+}
+
 export function speak(text: string, rate = 1) {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return false;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = rate;
-  window.speechSynthesis.speak(utterance);
+  if (typeof window === "undefined") return false;
+  
+  if (!("speechSynthesis" in window)) {
+    console.warn("[TTS] Speech Synthesis API not supported. Using fallback.");
+    playCloudFallback(text);
+    return true;
+  }
+  
+  let fallbackTimer: ReturnType<typeof setTimeout>;
+
+  const play = () => {
+    try {
+      window.speechSynthesis.resume();
+      window.speechSynthesis.cancel();
+      
+      activeUtterance = new SpeechSynthesisUtterance(text);
+      activeUtterance.rate = rate;
+      
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        const defaultVoice = voices.find((v) => v.default) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+        if (defaultVoice) {
+          activeUtterance.voice = defaultVoice;
+        }
+      }
+      
+      activeUtterance.onstart = () => {
+        clearTimeout(fallbackTimer); // Successfully started native TTS
+      };
+
+      activeUtterance.onerror = (e) => {
+        console.error("[TTS] Native error:", e);
+        clearTimeout(fallbackTimer);
+        playCloudFallback(text);
+      };
+
+      activeUtterance.onend = () => {
+        activeUtterance = null;
+      };
+      
+      window.speechSynthesis.speak(activeUtterance);
+    } catch (err) {
+      console.error("[TTS] Native API crash:", err);
+      playCloudFallback(text);
+    }
+  };
+
+  // If the browser's native TTS doesn't trigger 'onstart' within 1.5 seconds,
+  // we assume it's permanently broken/stuck and trigger the cloud fallback.
+  fallbackTimer = setTimeout(() => {
+    console.warn("[TTS] Native TTS timed out (stuck in queue). Triggering fallback.");
+    playCloudFallback(text);
+  }, 1500);
+
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      play();
+      window.speechSynthesis.onvoiceschanged = null;
+    };
+    play();
+  } else {
+    play();
+  }
+  
   return true;
 }
 
