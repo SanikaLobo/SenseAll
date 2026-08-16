@@ -21,21 +21,32 @@
 
 ## 🚀 The Vision
 
-In a world increasingly driven by digital communication, millions of individuals with speech and hearing impairments often find themselves excluded. **SenseAll** is our answer. It is a state-of-the-art accessibility platform that fuses computer vision, natural language processing, and multimodal feedback (visual, auditory, braille, and haptics) into a single, cohesive application.
+In a world increasingly driven by digital communication, millions of individuals with speech, hearing, and visual impairments often find themselves excluded. **SenseAll** is our answer. It is a state-of-the-art accessibility platform that fuses computer vision, natural language processing, and multimodal feedback into a single, cohesive application.
 
-Why did we build this? Because accessibility isn't an afterthought—it's a necessity. We wanted to build a bridge between Indian Sign Language (ISL) users and the rest of the world, doing so with cutting-edge AI directly in the browser to ensure absolute privacy and zero latency.
+Why did we build this? Because accessibility isn't an afterthought—it's a necessity. We wanted to build a bidirectional bridge between everyone, regardless of their physical capabilities, doing so with cutting-edge AI directly in the browser to ensure absolute privacy and zero latency.
 
 ---
 
 ## ✨ Premium Features
 
-- **Real-Time ISL Translation**: Instantly converts 18 distinct Indian Sign Language gestures into text with edge-based computer vision.
-- **Hybrid AI Detection Pipeline**:
-  - **MediaPipe HandLandmarker**: Powers the core inference engine. Using 3D skeletal distance geometry, it achieves lightning-fast, **rotation-invariant** gesture recognition (Thumbs-Up, Salute, Namaste, etc.).
-  - **Roboflow CNN Fallback**: Kicks in automatically to accurately classify complex flat-palm gestures when skeletal geometry alone is ambiguous.
-- **Natural Language Generation**: Uses **Google Gemini 1.5 Flash** to intelligently convert sequences of raw gesture tags into grammatically correct, natural English sentences.
-- **Robust Multi-Frame Filtering**: Features an advanced sliding window voting system that requires a 62.5% majority consensus, effectively eliminating camera jitter and background false-positives.
-- **Inclusive Multimodal Interface**: Deep integrations with Voice (TTS), digital Braille display, and Haptic feedback.
+### 🤟 Vision: Real-Time ISL Translation
+Instantly converts 18 distinct Indian Sign Language gestures into text using a **Hybrid AI Detection Pipeline**:
+- **MediaPipe HandLandmarker**: The core inference engine. Using 3D skeletal distance geometry, it achieves lightning-fast, **rotation-invariant** gesture recognition (Thumbs-Up, Salute, Namaste, etc.).
+- **Roboflow CNN Fallback**: Kicks in automatically to accurately classify complex flat-palm gestures when skeletal geometry alone is ambiguous.
+- **Robust Multi-Frame Filtering**: Features an advanced sliding window voting system requiring a 62.5% majority consensus, effectively eliminating camera jitter and background false-positives.
+
+### 🗣️ Voice: Text-To-Speech (TTS) & Speech-To-Text (STT)
+Bidirectional voice translation ensures fluid conversation:
+- **Text-to-Speech (TTS)**: Translates confirmed ISL gestures and typed text into natural-sounding, synthesized speech, allowing deaf/mute users to "speak" aloud.
+- **Speech-to-Text (STT)**: Transcribes spoken words from other participants into text on the screen, allowing users to read what is being said in real-time.
+
+### 🧠 NLP: Natural Language Generation
+Uses **Google Gemini 1.5 Flash** to intelligently convert disjointed sequences of raw ISL gesture tags (e.g., `[hello, i, deaf]`) into grammatically correct, natural English sentences ("Hello, I am deaf.").
+
+### ⠃⠗⠁⠊⠇⠇⠑ Braille & Haptics
+Total multimodal integration for the visually impaired:
+- **Digital Braille Display**: Dynamically maps incoming text to braille cells on the UI.
+- **Haptic Feedback**: Translates incoming interactions into physical vibration pulses (via the Web Haptics API), allowing users to *feel* the communication on supported devices.
 
 ---
 
@@ -56,15 +67,6 @@ Our hybrid AI system recognizes the following gestures with uncompromising preci
 | 🦻 | **Deaf** | MediaPipe (3 fingers) |
 | ⏰ | **Time** | MediaPipe (Tapping wrist) |
 | 👋 | **Hello / Bye / Thank You** | MediaPipe + Roboflow Fusion |
-
----
-
-## ⚙️ How the Pipeline Works
-
-1. **Gatekeeper (MediaPipe)**: Extracts 21 3D landmarks per hand. If no hands are detected, the pipeline halts—saving compute and preventing face-detection false positives.
-2. **Geometric Classification**: Measures Euclidean distances between the wrist and fingertips vs. PIP joints. This calculates finger curl state independently of camera angle (rotation invariant).
-3. **Roboflow Fallback**: If skeletal geometry aligns with a broad category (like an open hand), the frame passes to the Roboflow CNN to differentiate between similar signs.
-4. **Majority Voting**: Detections feed into an 8-frame sliding window. A gesture must win a 62.5% majority (5/8 votes) to be confirmed, filtering out noise flawlessly.
 
 ---
 
@@ -94,7 +96,7 @@ Our hybrid AI system recognizes the following gestures with uncompromising preci
    ```
 
 4. **Experience the app**
-   Open `http://localhost:8081` in your browser. *(Note: Camera access requires localhost or a secure HTTPS connection).*
+   Open `http://localhost:8081` in your browser. *(Note: Camera and Microphone access require localhost or a secure HTTPS connection).*
 
 ---
 

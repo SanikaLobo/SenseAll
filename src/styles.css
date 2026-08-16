@@ -198,3 +198,5 @@
 
 /* Hide Lovable Badge */
 [id^="lovable-badge"], .lovable-badge-container, #lovable-badge, div[id*="lovable"] { display: none !important; }
+
+lovable-badge, [class*="lovable"], [id*="lovable"] { display: none !important; }
