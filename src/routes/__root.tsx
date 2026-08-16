@@ -121,6 +121,8 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* Roboflow inference SDK — exposes window.roboflow for ISL model */}
+        <script src="https://cdn.roboflow.com/0.2.26/roboflow.js" />
       </head>
       <body>
         {children}

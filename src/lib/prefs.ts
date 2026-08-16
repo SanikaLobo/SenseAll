@@ -13,6 +13,7 @@ export type Prefs = {
   speechRate: number;
   haptics: boolean;
   hapticIntensity: number; // 1-3
+  geminiApiKey: string; // Gemini API key for ISL sign-to-text
 };
 
 export const DEFAULT_PREFS: Prefs = {
@@ -26,6 +27,7 @@ export const DEFAULT_PREFS: Prefs = {
   speechRate: 1,
   haptics: true,
   hapticIntensity: 2,
+  geminiApiKey: "AIzaSyB7bE4Ia9ZWk6D1VbGt2ZPVLDbfYhWvkNI",
 };
 
 const PREFS_KEY = "senseall.prefs.v1";

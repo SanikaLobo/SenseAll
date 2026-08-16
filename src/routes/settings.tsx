@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Volume2 } from "lucide-react";
+import { Volume2, Key } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -194,6 +194,63 @@ function SettingsPage() {
           value={[prefs.hapticIntensity]}
           onValueChange={([value]) => update({ hapticIntensity: value ?? 2 })}
         />
+      </section>
+
+      <section className="surface-panel p-6" aria-labelledby="gemini-heading">
+        <h2 id="gemini-heading" className="text-2xl font-semibold">
+          Gemini API key
+        </h2>
+        <p className="mt-2 text-base text-muted-foreground">
+          Required for Sign → Text: the detected ISL signs are sent to Gemini to form a natural
+          sentence. Get a free key at{" "}
+          <a
+            href="https://aistudio.google.com/app/apikey"
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-2"
+          >
+            aistudio.google.com
+          </a>
+          .
+        </p>
+        <label htmlFor="gemini-key" className="mt-4 block text-lg font-semibold">
+          API key
+        </label>
+        <div className="mt-2 flex max-w-lg gap-3">
+          <div className="relative flex-1">
+            <Key
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              size={18}
+              aria-hidden="true"
+            />
+            <Input
+              id="gemini-key"
+              type="password"
+              className="h-14 pl-9 text-base"
+              value={prefs.geminiApiKey}
+              onChange={(e) => update({ geminiApiKey: e.target.value })}
+              placeholder="AIza…"
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </div>
+          {prefs.geminiApiKey && (
+            <Button
+              variant="outline"
+              size="lg"
+              className="min-h-14"
+              onClick={() => {
+                update({ geminiApiKey: "" });
+                toast.success("API key removed.");
+              }}
+            >
+              Remove
+            </Button>
+          )}
+        </div>
+        {prefs.geminiApiKey && (
+          <p className="mt-2 text-sm text-muted-foreground">Key saved — ISL Sign → Text is active.</p>
+        )}
       </section>
 
       <section className="surface-panel p-6" aria-labelledby="reset-heading">
