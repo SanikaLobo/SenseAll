@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="public/favicon.ico" alt="SenseAll Logo" width="120" />
   
   <h1 align="center">SenseAll 🌐🤟</h1>
   
